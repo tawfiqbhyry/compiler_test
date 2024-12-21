@@ -1,0 +1,492 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> query
+Rule 1     query -> SELECT select_columns FROM table where_clause SEMICOLON
+Rule 2     select_columns -> ASTERISK
+Rule 3     select_columns -> column_list
+Rule 4     column_list -> IDENTIFIER
+Rule 5     column_list -> column_list COMMA IDENTIFIER
+Rule 6     table -> IDENTIFIER
+Rule 7     where_clause -> WHERE condition
+Rule 8     where_clause -> empty
+Rule 9     condition -> condition AND condition
+Rule 10    condition -> condition OR condition
+Rule 11    condition -> NOT condition
+Rule 12    condition -> LPAREN condition RPAREN
+Rule 13    condition -> comparison
+Rule 14    comparison -> IDENTIFIER compare_op value
+Rule 15    compare_op -> EQUALS
+Rule 16    compare_op -> NOT_EQUALS
+Rule 17    compare_op -> GREATER
+Rule 18    compare_op -> LESS
+Rule 19    compare_op -> GREATER_EQUALS
+Rule 20    compare_op -> LESS_EQUALS
+Rule 21    value -> STRING
+Rule 22    value -> NUMBER
+Rule 23    value -> IDENTIFIER
+Rule 24    empty -> <empty>
+
+Terminals, with rules where they appear
+
+AND                  : 9
+ASTERISK             : 2
+COMMA                : 5
+EQUALS               : 15
+FROM                 : 1
+GREATER              : 17
+GREATER_EQUALS       : 19
+IDENTIFIER           : 4 5 6 14 23
+LESS                 : 18
+LESS_EQUALS          : 20
+LPAREN               : 12
+NOT                  : 11
+NOT_EQUALS           : 16
+NUMBER               : 22
+OR                   : 10
+RPAREN               : 12
+SELECT               : 1
+SEMICOLON            : 1
+STRING               : 21
+WHERE                : 7
+error                : 
+
+Nonterminals, with rules where they appear
+
+column_list          : 3 5
+compare_op           : 14
+comparison           : 13
+condition            : 7 9 9 10 10 11 12
+empty                : 8
+query                : 0
+select_columns       : 1
+table                : 1
+value                : 14
+where_clause         : 1
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . query
+    (1) query -> . SELECT select_columns FROM table where_clause SEMICOLON
+
+    SELECT          shift and go to state 2
+
+    query                          shift and go to state 1
+
+state 1
+
+    (0) S' -> query .
+
+
+
+state 2
+
+    (1) query -> SELECT . select_columns FROM table where_clause SEMICOLON
+    (2) select_columns -> . ASTERISK
+    (3) select_columns -> . column_list
+    (4) column_list -> . IDENTIFIER
+    (5) column_list -> . column_list COMMA IDENTIFIER
+
+    ASTERISK        shift and go to state 4
+    IDENTIFIER      shift and go to state 6
+
+    select_columns                 shift and go to state 3
+    column_list                    shift and go to state 5
+
+state 3
+
+    (1) query -> SELECT select_columns . FROM table where_clause SEMICOLON
+
+    FROM            shift and go to state 7
+
+
+state 4
+
+    (2) select_columns -> ASTERISK .
+
+    FROM            reduce using rule 2 (select_columns -> ASTERISK .)
+
+
+state 5
+
+    (3) select_columns -> column_list .
+    (5) column_list -> column_list . COMMA IDENTIFIER
+
+    FROM            reduce using rule 3 (select_columns -> column_list .)
+    COMMA           shift and go to state 8
+
+
+state 6
+
+    (4) column_list -> IDENTIFIER .
+
+    COMMA           reduce using rule 4 (column_list -> IDENTIFIER .)
+    FROM            reduce using rule 4 (column_list -> IDENTIFIER .)
+
+
+state 7
+
+    (1) query -> SELECT select_columns FROM . table where_clause SEMICOLON
+    (6) table -> . IDENTIFIER
+
+    IDENTIFIER      shift and go to state 10
+
+    table                          shift and go to state 9
+
+state 8
+
+    (5) column_list -> column_list COMMA . IDENTIFIER
+
+    IDENTIFIER      shift and go to state 11
+
+
+state 9
+
+    (1) query -> SELECT select_columns FROM table . where_clause SEMICOLON
+    (7) where_clause -> . WHERE condition
+    (8) where_clause -> . empty
+    (24) empty -> .
+
+    WHERE           shift and go to state 13
+    SEMICOLON       reduce using rule 24 (empty -> .)
+
+    where_clause                   shift and go to state 12
+    empty                          shift and go to state 14
+
+state 10
+
+    (6) table -> IDENTIFIER .
+
+    WHERE           reduce using rule 6 (table -> IDENTIFIER .)
+    SEMICOLON       reduce using rule 6 (table -> IDENTIFIER .)
+
+
+state 11
+
+    (5) column_list -> column_list COMMA IDENTIFIER .
+
+    COMMA           reduce using rule 5 (column_list -> column_list COMMA IDENTIFIER .)
+    FROM            reduce using rule 5 (column_list -> column_list COMMA IDENTIFIER .)
+
+
+state 12
+
+    (1) query -> SELECT select_columns FROM table where_clause . SEMICOLON
+
+    SEMICOLON       shift and go to state 15
+
+
+state 13
+
+    (7) where_clause -> WHERE . condition
+    (9) condition -> . condition AND condition
+    (10) condition -> . condition OR condition
+    (11) condition -> . NOT condition
+    (12) condition -> . LPAREN condition RPAREN
+    (13) condition -> . comparison
+    (14) comparison -> . IDENTIFIER compare_op value
+
+    NOT             shift and go to state 17
+    LPAREN          shift and go to state 18
+    IDENTIFIER      shift and go to state 20
+
+    condition                      shift and go to state 16
+    comparison                     shift and go to state 19
+
+state 14
+
+    (8) where_clause -> empty .
+
+    SEMICOLON       reduce using rule 8 (where_clause -> empty .)
+
+
+state 15
+
+    (1) query -> SELECT select_columns FROM table where_clause SEMICOLON .
+
+    $end            reduce using rule 1 (query -> SELECT select_columns FROM table where_clause SEMICOLON .)
+
+
+state 16
+
+    (7) where_clause -> WHERE condition .
+    (9) condition -> condition . AND condition
+    (10) condition -> condition . OR condition
+
+    SEMICOLON       reduce using rule 7 (where_clause -> WHERE condition .)
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+
+
+state 17
+
+    (11) condition -> NOT . condition
+    (9) condition -> . condition AND condition
+    (10) condition -> . condition OR condition
+    (11) condition -> . NOT condition
+    (12) condition -> . LPAREN condition RPAREN
+    (13) condition -> . comparison
+    (14) comparison -> . IDENTIFIER compare_op value
+
+    NOT             shift and go to state 17
+    LPAREN          shift and go to state 18
+    IDENTIFIER      shift and go to state 20
+
+    condition                      shift and go to state 23
+    comparison                     shift and go to state 19
+
+state 18
+
+    (12) condition -> LPAREN . condition RPAREN
+    (9) condition -> . condition AND condition
+    (10) condition -> . condition OR condition
+    (11) condition -> . NOT condition
+    (12) condition -> . LPAREN condition RPAREN
+    (13) condition -> . comparison
+    (14) comparison -> . IDENTIFIER compare_op value
+
+    NOT             shift and go to state 17
+    LPAREN          shift and go to state 18
+    IDENTIFIER      shift and go to state 20
+
+    condition                      shift and go to state 24
+    comparison                     shift and go to state 19
+
+state 19
+
+    (13) condition -> comparison .
+
+    AND             reduce using rule 13 (condition -> comparison .)
+    OR              reduce using rule 13 (condition -> comparison .)
+    SEMICOLON       reduce using rule 13 (condition -> comparison .)
+    RPAREN          reduce using rule 13 (condition -> comparison .)
+
+
+state 20
+
+    (14) comparison -> IDENTIFIER . compare_op value
+    (15) compare_op -> . EQUALS
+    (16) compare_op -> . NOT_EQUALS
+    (17) compare_op -> . GREATER
+    (18) compare_op -> . LESS
+    (19) compare_op -> . GREATER_EQUALS
+    (20) compare_op -> . LESS_EQUALS
+
+    EQUALS          shift and go to state 26
+    NOT_EQUALS      shift and go to state 27
+    GREATER         shift and go to state 28
+    LESS            shift and go to state 29
+    GREATER_EQUALS  shift and go to state 30
+    LESS_EQUALS     shift and go to state 31
+
+    compare_op                     shift and go to state 25
+
+state 21
+
+    (9) condition -> condition AND . condition
+    (9) condition -> . condition AND condition
+    (10) condition -> . condition OR condition
+    (11) condition -> . NOT condition
+    (12) condition -> . LPAREN condition RPAREN
+    (13) condition -> . comparison
+    (14) comparison -> . IDENTIFIER compare_op value
+
+    NOT             shift and go to state 17
+    LPAREN          shift and go to state 18
+    IDENTIFIER      shift and go to state 20
+
+    condition                      shift and go to state 32
+    comparison                     shift and go to state 19
+
+state 22
+
+    (10) condition -> condition OR . condition
+    (9) condition -> . condition AND condition
+    (10) condition -> . condition OR condition
+    (11) condition -> . NOT condition
+    (12) condition -> . LPAREN condition RPAREN
+    (13) condition -> . comparison
+    (14) comparison -> . IDENTIFIER compare_op value
+
+    NOT             shift and go to state 17
+    LPAREN          shift and go to state 18
+    IDENTIFIER      shift and go to state 20
+
+    condition                      shift and go to state 33
+    comparison                     shift and go to state 19
+
+state 23
+
+    (11) condition -> NOT condition .
+    (9) condition -> condition . AND condition
+    (10) condition -> condition . OR condition
+
+    AND             reduce using rule 11 (condition -> NOT condition .)
+    OR              reduce using rule 11 (condition -> NOT condition .)
+    SEMICOLON       reduce using rule 11 (condition -> NOT condition .)
+    RPAREN          reduce using rule 11 (condition -> NOT condition .)
+
+  ! AND             [ shift and go to state 21 ]
+  ! OR              [ shift and go to state 22 ]
+
+
+state 24
+
+    (12) condition -> LPAREN condition . RPAREN
+    (9) condition -> condition . AND condition
+    (10) condition -> condition . OR condition
+
+    RPAREN          shift and go to state 34
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+
+
+state 25
+
+    (14) comparison -> IDENTIFIER compare_op . value
+    (21) value -> . STRING
+    (22) value -> . NUMBER
+    (23) value -> . IDENTIFIER
+
+    STRING          shift and go to state 37
+    NUMBER          shift and go to state 38
+    IDENTIFIER      shift and go to state 35
+
+    value                          shift and go to state 36
+
+state 26
+
+    (15) compare_op -> EQUALS .
+
+    STRING          reduce using rule 15 (compare_op -> EQUALS .)
+    NUMBER          reduce using rule 15 (compare_op -> EQUALS .)
+    IDENTIFIER      reduce using rule 15 (compare_op -> EQUALS .)
+
+
+state 27
+
+    (16) compare_op -> NOT_EQUALS .
+
+    STRING          reduce using rule 16 (compare_op -> NOT_EQUALS .)
+    NUMBER          reduce using rule 16 (compare_op -> NOT_EQUALS .)
+    IDENTIFIER      reduce using rule 16 (compare_op -> NOT_EQUALS .)
+
+
+state 28
+
+    (17) compare_op -> GREATER .
+
+    STRING          reduce using rule 17 (compare_op -> GREATER .)
+    NUMBER          reduce using rule 17 (compare_op -> GREATER .)
+    IDENTIFIER      reduce using rule 17 (compare_op -> GREATER .)
+
+
+state 29
+
+    (18) compare_op -> LESS .
+
+    STRING          reduce using rule 18 (compare_op -> LESS .)
+    NUMBER          reduce using rule 18 (compare_op -> LESS .)
+    IDENTIFIER      reduce using rule 18 (compare_op -> LESS .)
+
+
+state 30
+
+    (19) compare_op -> GREATER_EQUALS .
+
+    STRING          reduce using rule 19 (compare_op -> GREATER_EQUALS .)
+    NUMBER          reduce using rule 19 (compare_op -> GREATER_EQUALS .)
+    IDENTIFIER      reduce using rule 19 (compare_op -> GREATER_EQUALS .)
+
+
+state 31
+
+    (20) compare_op -> LESS_EQUALS .
+
+    STRING          reduce using rule 20 (compare_op -> LESS_EQUALS .)
+    NUMBER          reduce using rule 20 (compare_op -> LESS_EQUALS .)
+    IDENTIFIER      reduce using rule 20 (compare_op -> LESS_EQUALS .)
+
+
+state 32
+
+    (9) condition -> condition AND condition .
+    (9) condition -> condition . AND condition
+    (10) condition -> condition . OR condition
+
+    AND             reduce using rule 9 (condition -> condition AND condition .)
+    OR              reduce using rule 9 (condition -> condition AND condition .)
+    SEMICOLON       reduce using rule 9 (condition -> condition AND condition .)
+    RPAREN          reduce using rule 9 (condition -> condition AND condition .)
+
+  ! AND             [ shift and go to state 21 ]
+  ! OR              [ shift and go to state 22 ]
+
+
+state 33
+
+    (10) condition -> condition OR condition .
+    (9) condition -> condition . AND condition
+    (10) condition -> condition . OR condition
+
+    OR              reduce using rule 10 (condition -> condition OR condition .)
+    SEMICOLON       reduce using rule 10 (condition -> condition OR condition .)
+    RPAREN          reduce using rule 10 (condition -> condition OR condition .)
+    AND             shift and go to state 21
+
+  ! AND             [ reduce using rule 10 (condition -> condition OR condition .) ]
+  ! OR              [ shift and go to state 22 ]
+
+
+state 34
+
+    (12) condition -> LPAREN condition RPAREN .
+
+    AND             reduce using rule 12 (condition -> LPAREN condition RPAREN .)
+    OR              reduce using rule 12 (condition -> LPAREN condition RPAREN .)
+    SEMICOLON       reduce using rule 12 (condition -> LPAREN condition RPAREN .)
+    RPAREN          reduce using rule 12 (condition -> LPAREN condition RPAREN .)
+
+
+state 35
+
+    (23) value -> IDENTIFIER .
+
+    AND             reduce using rule 23 (value -> IDENTIFIER .)
+    OR              reduce using rule 23 (value -> IDENTIFIER .)
+    SEMICOLON       reduce using rule 23 (value -> IDENTIFIER .)
+    RPAREN          reduce using rule 23 (value -> IDENTIFIER .)
+
+
+state 36
+
+    (14) comparison -> IDENTIFIER compare_op value .
+
+    AND             reduce using rule 14 (comparison -> IDENTIFIER compare_op value .)
+    OR              reduce using rule 14 (comparison -> IDENTIFIER compare_op value .)
+    SEMICOLON       reduce using rule 14 (comparison -> IDENTIFIER compare_op value .)
+    RPAREN          reduce using rule 14 (comparison -> IDENTIFIER compare_op value .)
+
+
+state 37
+
+    (21) value -> STRING .
+
+    AND             reduce using rule 21 (value -> STRING .)
+    OR              reduce using rule 21 (value -> STRING .)
+    SEMICOLON       reduce using rule 21 (value -> STRING .)
+    RPAREN          reduce using rule 21 (value -> STRING .)
+
+
+state 38
+
+    (22) value -> NUMBER .
+
+    AND             reduce using rule 22 (value -> NUMBER .)
+    OR              reduce using rule 22 (value -> NUMBER .)
+    SEMICOLON       reduce using rule 22 (value -> NUMBER .)
+    RPAREN          reduce using rule 22 (value -> NUMBER .)
+
